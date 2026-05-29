@@ -1,0 +1,62 @@
+// READ-ONLY MIRROR of social-network-system/prisma/schema.prisma.
+//
+// social-network-system OWNS the database `socialdb` and is the SINGLE owner
+// of migrations. This socket server only `prisma generate`s a client against
+// the same DB — it NEVER runs `prisma migrate`. When the BE schema changes,
+// copy the changed models here and re-run `npx prisma generate`.
+//
+// Keep Message + MessageReaction byte-identical to the BE models (snake_case
+// @map, no User FK on senderId — the BE table has none) so the generated
+// client matches the actual columns.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MessageType {
+  text
+  image
+  file
+  video
+  system
+}
+
+model Message {
+  id             String      @id @default(uuid())
+  conversationId String      @map("conversation_id")
+  // No FK to users — the BE table stores senderId as a free-form string
+  // (BigInt user id stringified by NestJS JWT.sub). Keep it that way here.
+  senderId       String?     @map("sender_id")
+  senderName     String      @map("sender_name")
+  content        String
+  type           MessageType @default(text)
+  replyToId      String?     @map("reply_to_id")
+  replyTo        Message?    @relation("MessageReply", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies        Message[]   @relation("MessageReply")
+  editedAt       DateTime?   @map("edited_at")
+  deleted        Boolean     @default(false)
+  createdAt      DateTime    @default(now()) @map("created_at")
+
+  reactions MessageReaction[]
+
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@map("messages")
+}
+
+model MessageReaction {
+  messageId String  @map("message_id")
+  message   Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId    String  @map("user_id")
+  userName  String  @map("user_name")
+  emoji     String
+
+  @@id([messageId, userId])
+  @@index([messageId])
+  @@map("message_reactions")
+}

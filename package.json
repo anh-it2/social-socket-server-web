@@ -1,0 +1,28 @@
+{
+  "name": "social-socket-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone Socket.IO server — chat, notifications, presence",
+  "scripts": {
+    "check:schema": "node scripts/check-schema-drift.mjs",
+    "predev": "npm run check:schema",
+    "dev": "tsx watch src/index.ts",
+    "prebuild": "npm run check:schema",
+    "build": "tsc",
+    "start": "NODE_ENV=production node dist/index.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^25.5.2",
+    "prisma": "^6.19.3",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}
