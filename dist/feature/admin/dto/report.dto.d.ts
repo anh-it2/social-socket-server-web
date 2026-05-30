@@ -63,6 +63,7 @@ export interface ReportDecisionDTO {
     reportId: string;
     postId: string;
     postOwnerId?: string;
+    reporterId?: string;
 }
 export interface ReportClientToServerEvents {
     "report:emit": (data: ReportDTO, ack: (res: ReportActionAck) => void) => void;

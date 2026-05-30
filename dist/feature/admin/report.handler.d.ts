@@ -1,2 +1,3 @@
 import type { ReportNamespace, ReportSocket } from "./type";
-export declare function registerReportHandler(nsp: ReportNamespace, socket: ReportSocket): void;
+import type { NotificationNamespace } from "../notification/type";
+export declare function registerReportHandler(nsp: ReportNamespace, notificationNsp: NotificationNamespace, socket: ReportSocket): void;

@@ -2,7 +2,7 @@
  * DTOs — exact shape of data on the wire.
  * When backend changes a field, update ONLY this file and the mappers.
  */
-export type NotificationKind = "like" | "comment" | "share" | "follow" | "mention" | "friend_request" | "friend_accept" | "friend_reject";
+export type NotificationKind = "like" | "comment" | "share" | "follow" | "mention" | "friend_request" | "friend_accept" | "friend_reject" | "report_submitted" | "report_approved" | "report_rejected";
 export interface NotificationDTO {
     id: string;
     recipientId: string;

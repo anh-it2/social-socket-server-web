@@ -90,7 +90,7 @@ export function setupSocketServer(httpServer: HttpServer): IOServer {
 
   reportNsp.on("connection", (socket) => {
     logEvents("report", socket);
-    registerReportHandler(reportNsp, socket);
+    registerReportHandler(reportNsp, notificationNsp, socket);
     socket.on("disconnect", (reason) => {
       console.log(`[report] ← disconnected  ${socket.data.user.name}  reason=${reason}`);
     });

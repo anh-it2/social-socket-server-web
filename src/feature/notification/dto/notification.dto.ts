@@ -11,7 +11,10 @@ export type NotificationKind =
   | "mention"
   | "friend_request"
   | "friend_accept"
-  | "friend_reject";
+  | "friend_reject"
+  | "report_submitted"
+  | "report_approved"
+  | "report_rejected";
 
 // ─── Server → Client DTOs ───────────────────────────────────────────
 

@@ -72,6 +72,8 @@ export interface ReportDecisionDTO {
   reportId: string;
   postId: string;
   postOwnerId?: string;
+  // Reporter to notify when the admin resolves the report.
+  reporterId?: string;
 }
 
 // ─── Socket.IO event maps ───────────────────────────────────────────

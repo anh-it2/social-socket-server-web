@@ -72,7 +72,7 @@ function setupSocketServer(httpServer) {
     });
     reportNsp.on("connection", (socket) => {
         logEvents("report", socket);
-        (0, report_handler_1.registerReportHandler)(reportNsp, socket);
+        (0, report_handler_1.registerReportHandler)(reportNsp, notificationNsp, socket);
         socket.on("disconnect", (reason) => {
             console.log(`[report] ← disconnected  ${socket.data.user.name}  reason=${reason}`);
         });

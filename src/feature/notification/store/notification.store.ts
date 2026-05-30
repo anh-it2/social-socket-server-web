@@ -1,5 +1,19 @@
 import { randomUUID } from "crypto";
+import { prisma } from "../../../config/prisma";
 import type { NotificationDTO } from "../dto/notification.dto";
+
+/**
+ * User ids with role ADMIN — recipients for "new report" notifications.
+ * Raw SQL because this server's Prisma schema is a minimal mirror that only
+ * declares Message/MessageReaction (no User model), but the same DB has the
+ * `users` table owned by social-network-system.
+ */
+export async function listAdminIds(): Promise<string[]> {
+  const rows = await prisma.$queryRaw<Array<{ id: bigint }>>`
+    SELECT id FROM users WHERE role = 'ADMIN' AND deleted_at IS NULL
+  `;
+  return rows.map((r) => r.id.toString());
+}
 
 // In-memory store. The NestJS BE's `notifications` table has an incompatible
 // shape (BigInt ids, NotificationType enum that doesn't carry the kinds this
