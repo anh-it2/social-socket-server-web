@@ -8,6 +8,7 @@ const chat_handler_1 = require("../feature/chat/chat.handler");
 const presence_handler_1 = require("../feature/presence/presence.handler");
 const notification_handler_1 = require("../feature/notification/notification.handler");
 const report_handler_1 = require("../feature/admin/report.handler");
+const feed_handler_1 = require("../feature/feed/feed.handler");
 function setupSocketServer(httpServer) {
     const io = new socket_io_1.Server(httpServer, {
         cors: {
@@ -24,10 +25,12 @@ function setupSocketServer(httpServer) {
     const presenceNsp = io.of("/presence");
     const notificationNsp = io.of("/notification");
     const reportNsp = io.of("/report");
+    const feedNsp = io.of("/feed");
     chatNsp.use(auth_1.authMiddleware);
     presenceNsp.use(auth_1.authMiddleware);
     notificationNsp.use(auth_1.authMiddleware);
     reportNsp.use(auth_1.authMiddleware);
+    feedNsp.use(auth_1.authMiddleware);
     function logEvents(tag, socket) {
         const user = socket.data.user;
         console.log(`[${tag}] → connected  ${user.name} (${user.id})  sid=${socket.id}`);
@@ -72,6 +75,13 @@ function setupSocketServer(httpServer) {
         (0, report_handler_1.registerReportHandler)(reportNsp, socket);
         socket.on("disconnect", (reason) => {
             console.log(`[report] ← disconnected  ${socket.data.user.name}  reason=${reason}`);
+        });
+    });
+    feedNsp.on("connection", (socket) => {
+        logEvents("feed", socket);
+        (0, feed_handler_1.registerFeedHandler)(socket);
+        socket.on("disconnect", (reason) => {
+            console.log(`[feed] ← disconnected  ${socket.data.user.name}  reason=${reason}`);
         });
     });
     return io;

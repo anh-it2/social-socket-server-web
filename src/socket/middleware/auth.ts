@@ -6,10 +6,11 @@ import { authSchema } from "./auth.schema";
 
 type AuthSocket = Socket<any, any, any, SocketData>;
 
-/** JWT payload issued by social-platform-be: { sub: userId, email }. */
+/** JWT payload issued by social-platform-be: { sub: userId, email, role }. */
 interface TokenPayload {
   sub: string;
   email: string;
+  role?: string;
 }
 
 /** Minimal `Cookie:` header parser — avoids a dep for one lookup. */
@@ -87,6 +88,7 @@ export function authMiddleware(
     id: payload.sub,
     name: (hints.success && hints.data.userName) || "Anonymous",
     avatar: hints.success ? hints.data.avatar : undefined,
+    role: payload.role,
   };
 
   next();

@@ -59,18 +59,13 @@ export interface ReportPostRemovedDTO {
     postId: string;
     postOwnerId?: string;
 }
-export interface EmitReportDTO {
-    postId: string;
-    postOwnerId?: string;
-    postSnapshot: FeedPostSnapshotDTO;
-    reason: string;
-}
 export interface ReportDecisionDTO {
     reportId: string;
+    postId: string;
+    postOwnerId?: string;
 }
 export interface ReportClientToServerEvents {
-    "report:list": (ack: (res: ReportListResponseDTO) => void) => void;
-    "report:emit": (data: EmitReportDTO, ack: (res: ReportActionAck) => void) => void;
+    "report:emit": (data: ReportDTO, ack: (res: ReportActionAck) => void) => void;
     "report:approve": (data: ReportDecisionDTO, ack: (res: ReportActionAck) => void) => void;
     "report:reject": (data: ReportDecisionDTO, ack: (res: ReportActionAck) => void) => void;
 }

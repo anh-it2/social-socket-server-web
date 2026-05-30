@@ -68,25 +68,19 @@ export interface ReportPostRemovedDTO {
 
 // ─── Client → Server DTOs ───────────────────────────────────────────
 
-export interface EmitReportDTO {
-  postId: string;
-  postOwnerId?: string;
-  postSnapshot: FeedPostSnapshotDTO;
-  reason: string;
-}
-
 export interface ReportDecisionDTO {
   reportId: string;
+  postId: string;
+  postOwnerId?: string;
 }
 
 // ─── Socket.IO event maps ───────────────────────────────────────────
+// Relay-only: the BE persists reports (source of truth); these events just
+// fan out already-persisted data so connected admins/clients update live.
 
 export interface ReportClientToServerEvents {
-  "report:list": (
-    ack: (res: ReportListResponseDTO) => void,
-  ) => void;
   "report:emit": (
-    data: EmitReportDTO,
+    data: ReportDTO,
     ack: (res: ReportActionAck) => void,
   ) => void;
   "report:approve": (

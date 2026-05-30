@@ -52,7 +52,7 @@ async function hydrate(rows) {
         parentIds.length
             ? prisma_1.prisma.message.findMany({ where: { id: { in: parentIds } } })
             : Promise.resolve([]),
-        prisma_1.prisma.reaction.findMany({ where: { messageId: { in: messageIds } } }),
+        prisma_1.prisma.messageReaction.findMany({ where: { messageId: { in: messageIds } } }),
     ]);
     const parentById = new Map(parents.map((p) => [p.id, p]));
     const reactionsByMessage = new Map();
@@ -181,10 +181,10 @@ async function deleteConversationMessages(conversationId) {
  */
 async function applyReaction(messageId, userId, userName, emoji) {
     if (emoji === null) {
-        await prisma_1.prisma.reaction.deleteMany({ where: { messageId, userId } });
+        await prisma_1.prisma.messageReaction.deleteMany({ where: { messageId, userId } });
         return;
     }
-    await prisma_1.prisma.reaction.upsert({
+    await prisma_1.prisma.messageReaction.upsert({
         where: { messageId_userId: { messageId, userId } },
         create: { messageId, userId, userName, emoji },
         update: { userName, emoji },
